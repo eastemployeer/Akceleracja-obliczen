@@ -1,0 +1,6 @@
+jupyter
+matplotlib
+numba
+opencv-python
+pycuda
+cowsay
