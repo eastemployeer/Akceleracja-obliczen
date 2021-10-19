@@ -11,7 +11,7 @@ image = image * 1./255
 image_copy = image.copy()
 
 
-def rgbToYCbCr(image, image_copy):
+def rgbToRgb(image, image_copy):
     for x in range(image.shape[0]):
         for y in range(image.shape[1]):
             image[x,y,0] = image_copy[x,y,0] * 0.393 + image_copy[x,y,1] * 0.769 + image_copy[x,y,2] * 0.189
@@ -20,7 +20,7 @@ def rgbToYCbCr(image, image_copy):
     image = np.clip(image, 0, 1)
 
 @jit
-def rgbToYCbCrCUDA(image, image_copy):
+def rgbToRgbCUDA(image, image_copy):
     for x in range(image.shape[0]):
         for y in range(image.shape[1]):
             image[x,y,0] = image_copy[x,y,0] * 0.393 + image_copy[x,y,1] * 0.769 + image_copy[x,y,2] * 0.189
@@ -31,11 +31,11 @@ def rgbToYCbCrCUDA(image, image_copy):
 
 
 start = timer()
-(image1, image_copy1) = rgbToYCbCrCUDA(image,image_copy)
+(image1, image_copy1) = rgbToRgbCUDA(image,image_copy)
 print("with GPU:", timer()-start)
 
 start = timer()
-rgbToYCbCr(image,image_copy)
+rgbToRgb(image,image_copy)
 print("without GPU:", timer()-start)
 cuda.profile_stop()
 
