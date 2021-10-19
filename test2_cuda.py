@@ -11,7 +11,6 @@ image = image * 1./255
 image_copy = image.copy()
 
 
-
 def rgbToYCbCr(image, image_copy):
     for x in range(image.shape[0]):
         for y in range(image.shape[1]):
@@ -38,6 +37,7 @@ print("with GPU:", timer()-start)
 start = timer()
 rgbToYCbCr(image,image_copy)
 print("without GPU:", timer()-start)
+cuda.profile_stop()
 
 # plt.rcParams['figure.figsize'] = (18, 10)
 # plt.imshow(image1)
