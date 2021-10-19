@@ -3,4 +3,3 @@ matplotlib
 numba
 opencv-python
 pycuda
-cowsay
