@@ -16,7 +16,6 @@ def rgbToYCbCr(image, image_copy):
             image[x,y,0] = image_copy[x,y,0] * 0.229 + image_copy[x,y,1] * 0.587 + image_copy[x,y,2] * 0.114
             image[x,y,1] = image_copy[x,y,0] * 0.500 + image_copy[x,y,1] * (-0.418) + image_copy[x,y,2] * (-0.082) + 128
             image[x,y,2] = image_copy[x,y,0] * (-0.168) + image_copy[x,y,1] * (-0.331) + image_copy[x,y,2] * 0.500 + 128
-    image = np.clip(image, 0, 255)
     
 
 @jit
@@ -26,7 +25,6 @@ def rgbToYCbCrCUDA(image, image_copy):
             image[x,y,0] = image_copy[x,y,0] * 0.229 + image_copy[x,y,1] * 0.587 + image_copy[x,y,2] * 0.114
             image[x,y,1] = image_copy[x,y,0] * 0.500 + image_copy[x,y,1] * (-0.418) + image_copy[x,y,2] * (-0.082) + 128
             image[x,y,2] = image_copy[x,y,0] * (-0.168) + image_copy[x,y,1] * (-0.331) + image_copy[x,y,2] * 0.500 + 128
-    image = np.clip(image, 0, 255)
     return (image, image_copy)
         
 
@@ -39,6 +37,7 @@ start = timer()
 rgbToYCbCr(image, image_copy)
 print("without GPU:", timer()-start)
 
+image1 = np.clip(image1, 0, 255)
 imageRGB = cv.cvtColor(image1, cv.COLOR_YCrCb2RGB)
 ax[0].imshow(image_copy1)
 ax[1].imshow(imageRGB)

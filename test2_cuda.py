@@ -19,6 +19,9 @@ def rgbToRgb(image, image_copy):
             image[x,y,2] = image_copy[x,y,0] * 0.272 + image_copy[x,y,1] * 0.534 + image_copy[x,y,2] * 0.131
     image = np.clip(image, 0, 1)
 
+def clipImage(image):
+    np.clip(image,0,1)
+
 @jit
 def rgbToRgbCUDA(image, image_copy):
     for x in range(image.shape[0]):
@@ -26,17 +29,29 @@ def rgbToRgbCUDA(image, image_copy):
             image[x,y,0] = image_copy[x,y,0] * 0.393 + image_copy[x,y,1] * 0.769 + image_copy[x,y,2] * 0.189
             image[x,y,1] = image_copy[x,y,0] * 0.349 + image_copy[x,y,1] * 0.689 + image_copy[x,y,2] * 0.168
             image[x,y,2] = image_copy[x,y,0] * 0.272 + image_copy[x,y,1] * 0.534 + image_copy[x,y,2] * 0.131
-    image = np.clip(image, 0, 1)
     return (image, image_copy)
 
+@jit
+def clipImageCUDA(image):
+    return np.clip(image,0,1)
 
 start = timer()
 (image1, image_copy1) = rgbToRgbCUDA(image,image_copy)
-print("with GPU:", timer()-start)
+print("main part - with GPU:", timer()-start)
+
+start = timer()
+image1 = clipImageCUDA(image1)
+print("clipping - with GPU:", timer()-start)
+
 
 start = timer()
 rgbToRgb(image,image_copy)
-print("without GPU:", timer()-start)
+print("main part - without GPU:", timer()-start)
+
+start = timer()
+image = clipImage(image)
+print("clipping - without GPU:", timer()-start)
+
 cuda.profile_stop()
 
 # plt.rcParams['figure.figsize'] = (18, 10)
