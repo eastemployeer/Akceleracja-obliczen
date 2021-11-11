@@ -1,5 +1,6 @@
 from __future__ import division
 from numba import cuda
+from timeit import default_timer as timer
 import numpy
 import math
 
@@ -48,13 +49,19 @@ blockspergrid_y = int(math.ceil(B.shape[1] / threadsperblock[1]))
 blockspergrid = (blockspergrid_x, blockspergrid_y)
 
 # Start the kernel
+start = timer()
 matmul[blockspergrid, threadsperblock](A_global_mem, B_global_mem, C_global_mem)
+C = C_global_mem.copy_to_host()
+print("main part - with GPU:", timer()-start)
 
 # Copy the result back to the host
-C = C_global_mem.copy_to_host()
 
-print(C)
-print()
+
+# print(C)
+# print()
 C = numpy.zeros((240, 220))
+start = timer()
+
 matmul2(A, B, C)
-print(C)
+print("main part - without GPU:", timer()-start)
+# print(C)

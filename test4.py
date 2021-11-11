@@ -43,7 +43,7 @@ for x in range(len(downsampled_image_cb)):
     upsampled_image_cb.append([])
 
     # iterating over downsampled image width
-    for y in range(len(downsampled_image_cb[0])):
+    for y in range(len(downsampled_image_cb[0])): #600
         #CR
         upsample(upsampled_image_cr,downsampled_image_cr,x,y)
         #CB
@@ -54,6 +54,8 @@ for x in range(result_image.shape[0]):
         result_image[x,y,1] = upsampled_image_cr[x][y]
         result_image[x,y,2] = upsampled_image_cb[x][y] 
 
+print(len(downsampled_image_cb))
+print(len(upsampled_image_cr[1]))
         
 result_image = cv.cvtColor(result_image, cv.COLOR_YCrCb2RGB)
 
